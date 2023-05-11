@@ -36,20 +36,25 @@ export default function Home(props) {
             alt='background image'
           />
         </div>
-        <div className={styles.cardLayout}>
-          {coffeeStores.map((coffeeStore) => {
-            const { name, id, imgUrl } = coffeeStore;
-            return (
-              <Card
-                name={name}
-                key={coffeeStore.id}
-                imgUrl={imgUrl}
-                href={`/coffee-store/${id}`}
-                className={styles.card}
-              />
-            );
-          })}
-        </div>
+        {!!coffeeStores.length && (
+          <>
+            <h2 className={styles.heading2}> Bengaluru stores </h2>
+            <div className={styles.cardLayout}>
+              {coffeeStores.map((coffeeStore) => {
+                const { name, id, imgUrl } = coffeeStore;
+                return (
+                  <Card
+                    name={name}
+                    key={coffeeStore.id}
+                    imgUrl={imgUrl}
+                    href={`/coffee-store/${id}`}
+                    className={styles.card}
+                  />
+                );
+              })}
+            </div>
+          </>
+        )}
       </main>
     </div>
   );
