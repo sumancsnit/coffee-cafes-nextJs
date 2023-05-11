@@ -2,8 +2,18 @@ import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
 import Banner from '@/components/banner';
 import Image from 'next/image';
+import Card from '@/components/card';
+import coffeeStoresList from '../data/coffee-stores.json';
 
-export default function Home() {
+export async function getStaticProps(context) {
+  console.log('this console wont come in browser');
+  return {
+    props: { coffeeStores: coffeeStoresList }, // will be passed to the page component as props
+  };
+}
+
+export default function Home(props) {
+  const { coffeeStores } = props;
   const handleOnBannerBtnClick = () => {
     console.log('button clicked');
   };
@@ -25,6 +35,20 @@ export default function Home() {
             height={400}
             alt='background image'
           />
+        </div>
+        <div className={styles.cardLayout}>
+          {coffeeStores.map((coffeeStore) => {
+            const { name, id, imgUrl } = coffeeStore;
+            return (
+              <Card
+                name={name}
+                key={coffeeStore.id}
+                imgUrl={imgUrl}
+                href={`/coffee-store/${id}`}
+                className={styles.card}
+              />
+            );
+          })}
         </div>
       </main>
     </div>
