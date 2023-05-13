@@ -5,6 +5,7 @@ import Head from 'next/head';
 import coffeeStoresList from '../../data/coffee-stores.json';
 import styles from '../../styles/coffee-store.module.css';
 import Image from 'next/image';
+import { fetchCoffeeStores } from '@/lib/coffee-store';
 
 export async function getStaticPaths() {
   const paths = coffeeStoresList.map((list) => {
@@ -23,6 +24,7 @@ export async function getStaticPaths() {
 // `getStaticPaths` requires using `getStaticProps`
 export async function getStaticProps(context) {
   const { params } = context;
+  const coffeeStoresList = (await fetchCoffeeStores()) || [];
   return {
     props: {
       coffeeStore: coffeeStoresList.find((list) => {

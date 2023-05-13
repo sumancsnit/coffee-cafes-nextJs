@@ -3,12 +3,14 @@ import styles from '@/styles/Home.module.css';
 import Banner from '@/components/banner';
 import Image from 'next/image';
 import Card from '@/components/card';
-import coffeeStoresList from '../data/coffee-stores.json';
+import { fetchCoffeeStores } from '@/lib/coffee-store';
 
 export async function getStaticProps(context) {
   console.log('this console wont come in browser');
+  const coffeeStoresList = (await fetchCoffeeStores()) || [];
+
   return {
-    props: { coffeeStores: coffeeStoresList }, // will be passed to the page component as props
+    props: { coffeeStores: coffeeStoresList, images: [] }, // will be passed to the page component as props
   };
 }
 
@@ -45,7 +47,7 @@ export default function Home(props) {
                 return (
                   <Card
                     name={name}
-                    key={coffeeStore.id}
+                    key={id}
                     imgUrl={imgUrl}
                     href={`/coffee-store/${id}`}
                     className={styles.card}
