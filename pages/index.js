@@ -4,6 +4,7 @@ import Banner from '@/components/banner';
 import Image from 'next/image';
 import Card from '@/components/card';
 import { fetchCoffeeStores } from '@/lib/coffee-store';
+import useTrackLocation from '@/hooks/useTrackLocation';
 
 export async function getStaticProps(context) {
   console.log('this console wont come in browser');
@@ -16,8 +17,15 @@ export async function getStaticProps(context) {
 
 export default function Home(props) {
   const { coffeeStores } = props;
+  const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } =
+    useTrackLocation();
+  console.log(
+    '🚀 ~ file: index.js:21 ~ Home ~ locationErrorMsg:',
+    locationErrorMsg
+  );
+  console.log('🚀 ~ file: index.js:21 ~ Home ~ latLong:', latLong);
   const handleOnBannerBtnClick = () => {
-    console.log('button clicked');
+    handleTrackLocation();
   };
   return (
     <div className={styles.container}>
@@ -27,9 +35,10 @@ export default function Home(props) {
       </Head>
       <main className={styles.main}>
         <Banner
-          buttonText='View stores nearby'
+          buttonText={isFindingLocation ? 'Locating...' : 'View stores nearby'}
           handleOnClick={handleOnBannerBtnClick}
         />
+        {locationErrorMsg && <p> Something went wrong: {locationErrorMsg} </p>}
         <div className={styles.heroImage}>
           <Image
             src='/static/hero-image.png'
@@ -40,20 +49,22 @@ export default function Home(props) {
         </div>
         {!!coffeeStores.length && (
           <>
-            <h2 className={styles.heading2}> Bengaluru stores </h2>
-            <div className={styles.cardLayout}>
-              {coffeeStores.map((coffeeStore) => {
-                const { name, id, imgUrl } = coffeeStore;
-                return (
-                  <Card
-                    name={name}
-                    key={id}
-                    imgUrl={imgUrl}
-                    href={`/coffee-store/${id}`}
-                    className={styles.card}
-                  />
-                );
-              })}
+            <div className={styles.sectionWrapper}>
+              <h2 className={styles.heading2}> Bengaluru stores </h2>
+              <div className={styles.cardLayout}>
+                {coffeeStores.map((coffeeStore) => {
+                  const { name, id, imgUrl } = coffeeStore;
+                  return (
+                    <Card
+                      name={name}
+                      key={id}
+                      imgUrl={imgUrl}
+                      href={`/coffee-store/${id}`}
+                      className={styles.card}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </>
         )}
