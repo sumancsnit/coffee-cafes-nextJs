@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Card from '@/components/card';
 import { fetchCoffeeStores } from '@/lib/coffee-store';
 import useTrackLocation from '@/hooks/useTrackLocation';
+import { useEffect, useState } from 'react';
 
 export async function getStaticProps(context) {
   console.log('this console wont come in browser');
@@ -19,11 +20,28 @@ export default function Home(props) {
   const { coffeeStores } = props;
   const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } =
     useTrackLocation();
-  console.log(
-    '🚀 ~ file: index.js:21 ~ Home ~ locationErrorMsg:',
-    locationErrorMsg
-  );
-  console.log('🚀 ~ file: index.js:21 ~ Home ~ latLong:', latLong);
+  const [coffeeStoresNearMe, setCoffeeStoresNearMe] = useState([]);
+  const [coffeeFetchError, setCoffeeFetchError] = useState('');
+
+  useEffect(() => {
+    const getCoffeeStores = async () => {
+      const { latitude, longitude } = latLong;
+      try {
+        const fetchedCoffeeStores = await fetchCoffeeStores(
+          latitude,
+          longitude
+        );
+        setCoffeeStoresNearMe(fetchedCoffeeStores);
+      } catch (error) {
+        console.log({ error });
+        setCoffeeFetchError(error.message);
+      }
+    };
+    if (latLong) {
+      getCoffeeStores();
+    }
+  }, [latLong]);
+
   const handleOnBannerBtnClick = () => {
     handleTrackLocation();
   };
@@ -39,6 +57,7 @@ export default function Home(props) {
           handleOnClick={handleOnBannerBtnClick}
         />
         {locationErrorMsg && <p> Something went wrong: {locationErrorMsg} </p>}
+        {coffeeFetchError && <p> Something went wrong: {coffeeFetchError} </p>}
         <div className={styles.heroImage}>
           <Image
             src='/static/hero-image.png'
@@ -47,10 +66,31 @@ export default function Home(props) {
             alt='background image'
           />
         </div>
-        {!!coffeeStores.length && (
+        {!!coffeeStoresNearMe?.length && (
           <>
             <div className={styles.sectionWrapper}>
-              <h2 className={styles.heading2}> Bengaluru stores </h2>
+              <h2 className={styles.heading2}> Stores Near Me </h2>
+              <div className={styles.cardLayout}>
+                {coffeeStoresNearMe.map((coffeeStore) => {
+                  const { name, id, imgUrl } = coffeeStore;
+                  return (
+                    <Card
+                      name={name}
+                      key={id}
+                      imgUrl={imgUrl}
+                      href={`/coffee-store/${id}`}
+                      className={styles.card}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
+        {!!coffeeStores?.length && (
+          <>
+            <div className={styles.sectionWrapper}>
+              <h2 className={styles.heading2}> Chennai stores </h2>
               <div className={styles.cardLayout}>
                 {coffeeStores.map((coffeeStore) => {
                   const { name, id, imgUrl } = coffeeStore;

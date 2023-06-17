@@ -7,30 +7,38 @@ import styles from '../../styles/coffee-store.module.css';
 import Image from 'next/image';
 import { fetchCoffeeStores } from '@/lib/coffee-store';
 
+// `getStaticPaths` requires using `getStaticProps`
+export async function getStaticProps(staticProps) {
+  console.log(
+    '🚀 ~ file: [id].js:12 ~ getStaticProps ~ staticProps:',
+    staticProps
+  );
+  const { params } = staticProps;
+  const coffeeStoresList = (await fetchCoffeeStores()) || [];
+  const findCoffeeStoreById =
+    coffeeStoresList.find((list) => {
+      return list.id == params.id;
+    }) || {};
+  return {
+    props: {
+      coffeeStore: findCoffeeStoreById,
+    }, // will be passed to the page component as props
+  };
+}
+
 export async function getStaticPaths() {
-  const paths = coffeeStoresList.map((list) => {
+  const coffeeStores = (await fetchCoffeeStores()) || [];
+  const paths = coffeeStores.map((list) => {
     return {
       params: {
         id: list.id + '',
       },
     };
   });
+  console.log('🚀 ~ file: [id].js:32 ~ paths ~ paths:', paths);
   return {
     paths,
     fallback: true, // can also be true or 'blocking'
-  };
-}
-
-// `getStaticPaths` requires using `getStaticProps`
-export async function getStaticProps(context) {
-  const { params } = context;
-  const coffeeStoresList = (await fetchCoffeeStores()) || [];
-  return {
-    props: {
-      coffeeStore: coffeeStoresList.find((list) => {
-        return list.id == params.id;
-      }),
-    }, // will be passed to the page component as props
   };
 }
 
@@ -56,7 +64,10 @@ const CoffeeStore = (props) => {
               <p className={styles.name}>{name}</p>
             </div>
             <Image
-              src={imgUrl}
+              src={
+                imgUrl ||
+                'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'
+              }
               alt={name}
               width={600}
               height={360}
