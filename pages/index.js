@@ -6,7 +6,7 @@ import Card from '@/components/card';
 import { fetchCoffeeStores } from '@/lib/coffee-store';
 import useTrackLocation from '@/hooks/useTrackLocation';
 import { useEffect, useState, useContext } from 'react';
-import { ACTION_TYPES, StoreContext } from './_app';
+import { ACTION_TYPES, StoreContext } from '../store/store-context';
 
 export async function getStaticProps(context) {
   console.log('this console wont come in browser');

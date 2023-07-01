@@ -1,18 +1,16 @@
 import Link from 'next/link';
+import { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import cls from 'classnames';
 import Head from 'next/head';
-import coffeeStoresList from '../../data/coffee-stores.json';
 import styles from '../../styles/coffee-store.module.css';
 import Image from 'next/image';
 import { fetchCoffeeStores } from '@/lib/coffee-store';
+import { isEmpty } from '../../utils';
+import { StoreContext } from '../../store/store-context';
 
 // `getStaticPaths` requires using `getStaticProps`
 export async function getStaticProps(staticProps) {
-  console.log(
-    '🚀 ~ file: [id].js:12 ~ getStaticProps ~ staticProps:',
-    staticProps
-  );
   const { params } = staticProps;
   const coffeeStoresList = (await fetchCoffeeStores()) || [];
   const findCoffeeStoreById =
@@ -35,20 +33,36 @@ export async function getStaticPaths() {
       },
     };
   });
-  console.log('🚀 ~ file: [id].js:32 ~ paths ~ paths:', paths);
   return {
     paths,
     fallback: true, // can also be true or 'blocking'
   };
 }
 
-const CoffeeStore = (props) => {
+const CoffeeStore = (initialProps) => {
   const router = useRouter();
-  if (router.isFallback) return <div>Loading...</div>;
-  const { name, imgUrl, address, neighbourhood } = props.coffeeStore || {};
+  const id = router.query.id;
+  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
+  const {
+    state: { coffeeStores },
+  } = useContext(StoreContext);
+
+  useEffect(() => {
+    if (isEmpty(initialProps.coffeeStore)) {
+      if (coffeeStores.length > 0) {
+        const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
+          return coffeeStore.id.toString() === id; //dynamic id
+        });
+        setCoffeeStore(findCoffeeStoreById);
+      }
+    }
+  }, [id]);
 
   const handleUpvoteButton = () => {};
 
+  const { name, address, neighbourhood, imgUrl } = coffeeStore ?? {};
+
+  if (router.isFallback) return <div>Loading...</div>;
   return (
     <>
       <Head>
