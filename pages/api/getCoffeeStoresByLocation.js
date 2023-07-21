@@ -1,4 +1,4 @@
-import { fetchCoffeeStores } from './../../lib/coffee-store';
+import { fetchCoffeeStores } from '../../lib/coffee-store';
 
 const getCoffeeStoresByLocation = async (req, res) => {
   const { lat, lon } = req.query;
