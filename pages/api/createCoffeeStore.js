@@ -49,6 +49,9 @@ const createCoffeeStore = async (req, res) => {
       res.status(500);
       res.json({ message: 'Error creating or finding a store', err });
     }
+  } else {
+    res.status(400);
+    res.json({ message: 'method is get' });
   }
 };
 
