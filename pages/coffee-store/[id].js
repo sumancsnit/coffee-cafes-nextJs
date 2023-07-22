@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import useSWR from 'swr';
 import { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import cls from 'classnames';
@@ -6,7 +7,7 @@ import Head from 'next/head';
 import styles from '../../styles/coffee-store.module.css';
 import Image from 'next/image';
 import { fetchCoffeeStores } from '@/lib/coffee-store';
-import { isEmpty } from '../../utils';
+import { isEmpty, fetcher } from '../../utils';
 import { StoreContext } from '../../store/store-context';
 
 // `getStaticPaths` requires using `getStaticProps`
@@ -43,6 +44,7 @@ const CoffeeStore = (initialProps) => {
   const router = useRouter();
   const id = router.query.id;
   const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
+  const [votingCount, setVotingCount] = useState(1);
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);
@@ -94,9 +96,25 @@ const CoffeeStore = (initialProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, initialProps.coffeeStore]);
 
-  const handleUpvoteButton = () => {};
+  const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
+
+  useEffect(() => {
+    if (data && data.length) {
+      console.log('data from SWR', data);
+      setCoffeeStore(data[0]);
+      setVotingCount(data[0].voting);
+    }
+  }, [data]);
+
+  const handleUpvoteButton = () => {
+    setVotingCount((count) => count + 1);
+  };
 
   const { name, address, neighbourhood, imgUrl } = coffeeStore ?? {};
+
+  if (error) {
+    return <div>Something went wrong retrieving coffee store page</div>;
+  }
 
   if (router.isFallback) return <div>Loading...</div>;
   return (
@@ -150,7 +168,7 @@ const CoffeeStore = (initialProps) => {
                 height={24}
                 alt='i'
               />
-              <p className={styles.text}>1</p>
+              <p className={styles.text}>{votingCount}</p>
             </div>
 
             <button

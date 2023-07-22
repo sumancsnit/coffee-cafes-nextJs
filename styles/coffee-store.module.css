@@ -100,6 +100,9 @@
 .upvoteButton:hover {
   background-color: var(--text-purple);
 }
+.upvoteButton:focus {
+  outline: none;
+}
 
 @media (min-width: 1024px) {
   .container {
