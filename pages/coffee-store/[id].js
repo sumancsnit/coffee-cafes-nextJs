@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ThreeDots } from 'react-loader-spinner';
 import useSWR from 'swr';
 import { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -44,16 +45,14 @@ const CoffeeStore = (initialProps) => {
   const router = useRouter();
   const id = router.query.id;
   const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
-  const [votingCount, setVotingCount] = useState(1);
+  const [votingCount, setVotingCount] = useState(0);
+  const [loader, setLoader] = useState(false);
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
-    console.log(
-      '🚀 ~ file: [id].js:51 ~ handleCreateCoffeeStore ~ coffeeStore:',
-      coffeeStore
-    );
+    setLoader(true);
     try {
       const { id, name, voting, imgUrl, neighbourhood, address } = coffeeStore;
       const response = await fetch('/api/createCoffeeStore', {
@@ -72,9 +71,10 @@ const CoffeeStore = (initialProps) => {
       });
 
       const dbCoffeeStore = await response.json();
-      console.log({ dbCoffeeStore });
     } catch (err) {
       console.error('Error creating coffee store', err);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -100,14 +100,32 @@ const CoffeeStore = (initialProps) => {
 
   useEffect(() => {
     if (data && data.length) {
-      console.log('data from SWR', data);
-      setCoffeeStore(data[0]);
       setVotingCount(data[0].voting);
     }
   }, [data]);
 
-  const handleUpvoteButton = () => {
-    setVotingCount((count) => count + 1);
+  const handleUpvoteButton = async () => {
+    setLoader(true);
+    try {
+      const response = await fetch('/api/upVoteCoffeeStoreById', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id,
+        }),
+      });
+
+      const dbCoffeeStore = await response.json();
+      if (dbCoffeeStore?.length) {
+        setVotingCount((count) => count + 1);
+      }
+    } catch (error) {
+      console.error('Error upvoting the coffee store', error);
+    } finally {
+      setLoader(false);
+    }
   };
 
   const { name, address, neighbourhood, imgUrl } = coffeeStore ?? {};
@@ -126,7 +144,16 @@ const CoffeeStore = (initialProps) => {
         <div className={styles.container}>
           <div className={styles.col1}>
             <div className={styles.backToHomeLink}>
-              <Link href='/'>Back to home</Link>
+              <Link className={styles.hrefLink} href='/'>
+                {' '}
+                <Image
+                  src='/static/icons/arrow_back.svg'
+                  width={24}
+                  height={24}
+                  alt='i'
+                />{' '}
+                Back to home{' '}
+              </Link>
             </div>
             <div className={styles.nameWrapper}>
               <p className={styles.name}>{name}</p>
@@ -168,14 +195,38 @@ const CoffeeStore = (initialProps) => {
                 height={24}
                 alt='i'
               />
-              <p className={styles.text}>{votingCount}</p>
+              <p className={styles.text}>{votingCount} </p>
+              <ThreeDots
+                height='10'
+                width='40'
+                radius='9'
+                color='#4fa94d'
+                ariaLabel='three-dots-loading'
+                wrapperStyle={{ paddingLeft: 8 }}
+                wrapperClassName=''
+                visible={loader}
+              />
             </div>
 
             <button
               className={styles.upvoteButton}
               onClick={handleUpvoteButton}
+              disabled={loader}
             >
-              Up vote!
+              {!loader ? (
+                'Up vote!'
+              ) : (
+                <ThreeDots
+                  height='16'
+                  width='40'
+                  radius='9'
+                  color='#fff'
+                  ariaLabel='three-dots-loading'
+                  wrapperStyle={{ paddingLeft: 8 }}
+                  wrapperClassName=''
+                  visible={loader}
+                />
+              )}
             </button>
           </div>
         </div>
