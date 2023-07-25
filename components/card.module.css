@@ -58,6 +58,12 @@
   }
 }
 
+@media (max-width: 639px) {
+  .cardHeader {
+    font-size: 1rem;
+  }
+}
+
 /* additional  */
 .cardImage {
   object-fit: cover;

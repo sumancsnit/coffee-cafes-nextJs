@@ -134,3 +134,21 @@
     display: inline;
   }
 }
+
+@media (max-width: 639px) {
+  .title {
+    display: flex;
+    font-size: 2rem;
+  }
+  .title1 {
+    padding-right: 0.5rem;
+  }
+  .button {
+    font-size: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .subTitle {
+    font-size: 1.25rem;
+  }
+}

@@ -131,11 +131,24 @@ const CoffeeStore = (initialProps) => {
 
   const { name, address, neighbourhood, imgUrl } = coffeeStore ?? {};
 
-  if (error) {
-    return <div>Something went wrong retrieving coffee store page</div>;
+  // if (error) {
+  //   return <div>Something went wrong retrieving coffee store page</div>;
+  // }
+
+  if (router.isFallback) {
+    return (
+      <div className={styles.loaderWrapper}>
+        <RotatingLines
+          strokeColor='grey'
+          strokeWidth='5'
+          animationDuration='0.75'
+          width='96'
+          visible={true}
+        />
+      </div>
+    );
   }
 
-  if (router.isFallback) return <div>Loading...</div>;
   return (
     <>
       <Head>
