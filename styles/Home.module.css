@@ -111,3 +111,10 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+@media (max-width: 639px) {
+  .heroImage img {
+    width: 100vw;
+    height: auto;
+  }
+}
