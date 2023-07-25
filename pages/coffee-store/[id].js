@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ThreeDots } from 'react-loader-spinner';
+import { ThreeDots, RotatingLines } from 'react-loader-spinner';
 import useSWR from 'swr';
 import { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -100,6 +100,7 @@ const CoffeeStore = (initialProps) => {
 
   useEffect(() => {
     if (data && data.length) {
+      setCoffeeStore(data[0]);
       setVotingCount(data[0].voting);
     }
   }, [data]);
@@ -140,6 +141,17 @@ const CoffeeStore = (initialProps) => {
       <Head>
         <title>{name}</title>
       </Head>
+      {loader && (
+        <div className={styles.loaderWrapper}>
+          <RotatingLines
+            strokeColor='grey'
+            strokeWidth='5'
+            animationDuration='0.75'
+            width='96'
+            visible={true}
+          />
+        </div>
+      )}
       <div className={styles.layout}>
         <div className={styles.container}>
           <div className={styles.col1}>
@@ -213,20 +225,7 @@ const CoffeeStore = (initialProps) => {
               onClick={handleUpvoteButton}
               disabled={loader}
             >
-              {!loader ? (
-                'Up vote!'
-              ) : (
-                <ThreeDots
-                  height='16'
-                  width='40'
-                  radius='9'
-                  color='#fff'
-                  ariaLabel='three-dots-loading'
-                  wrapperStyle={{ paddingLeft: 8 }}
-                  wrapperClassName=''
-                  visible={loader}
-                />
-              )}
+              Up vote!
             </button>
           </div>
         </div>

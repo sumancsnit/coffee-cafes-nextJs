@@ -6,6 +6,17 @@
   margin-bottom: 14rem /* 224px */;
 }
 
+.loaderWrapper {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 25;
+  margin-top: -10%;
+}
+
 .main {
   margin-top: 2.5rem /* 40px */;
   margin-left: auto;
