@@ -130,8 +130,9 @@
   }
   .sectionWrapper {
     margin-top: 0;
+    padding-bottom: 1rem;
   }
-  .heading2{
+  .heading2 {
     font-size: 1.25rem;
     text-align: center;
     line-height: normal;
