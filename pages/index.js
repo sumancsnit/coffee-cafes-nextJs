@@ -26,6 +26,7 @@ export default function Home(props) {
   const [loader, setLoader] = useState(false);
   const { dispatch, state } = useContext(StoreContext);
   const { coffeeStores, latLong } = state;
+  console.log('🚀 ~ file: index.js:29 ~ Home ~ coffeeStores:', coffeeStores);
   useEffect(() => {
     const getCoffeeStores = async () => {
       setLoader(true);
@@ -84,9 +85,7 @@ export default function Home(props) {
         </Head>
         <main className={styles.main}>
           <Banner
-            buttonText={
-              isFindingLocation ? 'Locating...' : 'View stores nearby'
-            }
+            buttonText={isFindingLocation ? 'Locating...' : 'View cafes nearby'}
             handleOnClick={handleOnBannerBtnClick}
           />
           {locationErrorMsg && (
@@ -106,7 +105,10 @@ export default function Home(props) {
           {!!coffeeStores?.length && (
             <>
               <div className={styles.sectionWrapper}>
-                <h2 className={styles.heading2}> Stores Near Me </h2>
+                <h2 className={styles.heading2}>
+                  Cafes Near Me
+                  {` (${coffeeStores.at(0).localName || 'You Location'})`}
+                </h2>
                 <div className={styles.cardLayout}>
                   {coffeeStores.map((coffeeStore) => {
                     const { name, id, imgUrl } = coffeeStore;
@@ -127,7 +129,7 @@ export default function Home(props) {
           {!!props.coffeeStores?.length && (
             <>
               <div className={styles.sectionWrapper}>
-                <h2 className={styles.heading2}> Chennai stores </h2>
+                <h2 className={styles.heading2}> Cafes In Kodaikanal </h2>
                 <div className={styles.cardLayout}>
                   {props.coffeeStores.map((coffeeStore) => {
                     const { name, id, imgUrl } = coffeeStore;
