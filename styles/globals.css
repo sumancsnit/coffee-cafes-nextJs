@@ -92,7 +92,9 @@ body {
 
 body {
   /* color: rgb(var(--foreground-rgb)); */
+  background-color: linear-gradient(to right, #fd4482, #af81de);
   background: url('/static/background.png');
+  background-color: #ea7c96;
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
