@@ -72,7 +72,7 @@ const CoffeeStore = (initialProps) => {
         }),
       });
 
-      const dbCoffeeStore = await response.json();
+      // await response.json();
     } catch (err) {
       console.error('Error creating coffee store', err);
     } finally {

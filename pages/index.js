@@ -26,7 +26,6 @@ export default function Home(props) {
   const [loader, setLoader] = useState(false);
   const { dispatch, state } = useContext(StoreContext);
   const { coffeeStores, latLong } = state;
-  console.log('🚀 ~ file: index.js:29 ~ Home ~ coffeeStores:', coffeeStores);
   useEffect(() => {
     const getCoffeeStores = async () => {
       setLoader(true);
@@ -82,7 +81,7 @@ export default function Home(props) {
         }),
       });
 
-      const dbCoffeeStore = await response.json();
+      // await response.json();
     } catch (err) {
       console.error('Error creating coffee store', err);
     }
@@ -91,8 +90,8 @@ export default function Home(props) {
   useEffect(() => {
     setTimeout(() => {
       handleTrackLocation();
-      console.log('time out clicked');
     }, 2000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOnBannerBtnClick = () => {
