@@ -12,6 +12,7 @@
   padding: 4px;
   right: 0;
   color: #fff;
+  z-index: 999;
 }
 
 .loaderWrapper {
