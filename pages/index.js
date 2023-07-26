@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import moment from 'moment';
 import styles from '@/styles/Home.module.css';
 import { RotatingLines } from 'react-loader-spinner';
 import Banner from '@/components/banner';
@@ -78,6 +79,7 @@ export default function Home(props) {
           neighbourhood: neighbourhood || '',
           address: address || '',
           latLon,
+          createdOn: moment().format('MMMM D YYYY, h:mm a'),
         }),
       });
 

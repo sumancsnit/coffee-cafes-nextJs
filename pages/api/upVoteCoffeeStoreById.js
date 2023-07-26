@@ -1,4 +1,5 @@
 import { table, findRecordByFilter, getMinifiedRecords } from '@/lib/airtable';
+import moment from 'moment';
 
 const upVoteCoffeeStoreById = async (req, res) => {
   if (req.method === 'PUT') {
@@ -19,6 +20,7 @@ const upVoteCoffeeStoreById = async (req, res) => {
             id: record.recordId,
             fields: {
               voting: calculateVoting,
+              updatedOn: moment().format('MMMM D YYYY, h:mm a'),
             },
           },
         ]);
