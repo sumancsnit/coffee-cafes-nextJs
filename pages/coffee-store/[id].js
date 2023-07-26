@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import moment from 'moment';
 import { ThreeDots, RotatingLines } from 'react-loader-spinner';
 import useSWR from 'swr';
 import { useContext, useState, useEffect } from 'react';
@@ -69,6 +70,7 @@ const CoffeeStore = (initialProps) => {
           neighbourhood: neighbourhood || '',
           address: address || '',
           latLon,
+          createdOn: moment().format('MMMM D YYYY, h:mm a'),
         }),
       });
 
