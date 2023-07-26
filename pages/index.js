@@ -91,7 +91,7 @@ export default function Home(props) {
     setTimeout(() => {
       handleTrackLocation();
     }, 2000);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOnBannerBtnClick = () => {
@@ -115,6 +115,7 @@ export default function Home(props) {
           <title>Coffee Cafes</title>
           <link rel='icon' href='/favicon.ico' />
         </Head>
+        <p className={styles.userName}>Suman</p>
         <main className={styles.main}>
           <Banner
             buttonText={isFindingLocation ? 'Locating...' : 'View cafes nearby'}
