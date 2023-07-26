@@ -160,7 +160,7 @@ export default function Home(props) {
           {!!props.coffeeStores?.length && (
             <>
               <div className={styles.sectionWrapper}>
-                <h2 className={styles.heading2}> Cafes In Kodaikanal </h2>
+                <h2 className={styles.heading2}> Cafes In Coorg </h2>
                 <div className={styles.cardLayout}>
                   {props.coffeeStores.map((coffeeStore) => {
                     const { name, id, imgUrl } = coffeeStore;
