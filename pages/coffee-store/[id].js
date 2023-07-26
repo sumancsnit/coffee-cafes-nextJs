@@ -46,7 +46,7 @@ const CoffeeStore = (initialProps) => {
   const id = router.query.id;
   const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
   const [votingCount, setVotingCount] = useState(0);
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);
@@ -104,8 +104,13 @@ const CoffeeStore = (initialProps) => {
     if (data && data.length) {
       setCoffeeStore(data[0]);
       setVotingCount(data[0].voting);
+      setLoader(false);
     }
-  }, [data]);
+    if (error) {
+      console.log('swr error:', error);
+      setLoader(false);
+    }
+  }, [data, error]);
 
   const handleUpvoteButton = async () => {
     setLoader(true);
