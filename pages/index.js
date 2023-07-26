@@ -120,7 +120,7 @@ export default function Home(props) {
             handleOnClick={handleOnBannerBtnClick}
           />
           {locationErrorMsg && (
-            <p> Something went wrong: {locationErrorMsg} </p>
+            <p> Please grant location permission: {locationErrorMsg} </p>
           )}
           {coffeeFetchError && (
             <p> Something went wrong: {coffeeFetchError} </p>
