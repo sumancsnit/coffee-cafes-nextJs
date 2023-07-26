@@ -88,9 +88,7 @@ export default function Home(props) {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      handleTrackLocation();
-    }, 2000);
+    handleTrackLocation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
