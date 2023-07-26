@@ -124,6 +124,7 @@ const CoffeeStore = (initialProps) => {
         },
         body: JSON.stringify({
           id,
+          updatedOn: moment().format('MMMM D YYYY, h:mm a'),
         }),
       });
 
