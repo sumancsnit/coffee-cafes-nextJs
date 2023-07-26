@@ -54,7 +54,8 @@ const CoffeeStore = (initialProps) => {
   const handleCreateCoffeeStore = async (coffeeStore) => {
     setLoader(true);
     try {
-      const { id, name, voting, imgUrl, neighbourhood, address } = coffeeStore;
+      const { id, name, voting, imgUrl, neighbourhood, address, latLon } =
+        coffeeStore;
       const response = await fetch('/api/createCoffeeStore', {
         method: 'POST',
         headers: {
@@ -67,6 +68,7 @@ const CoffeeStore = (initialProps) => {
           imgUrl,
           neighbourhood: neighbourhood || '',
           address: address || '',
+          latLon,
         }),
       });
 

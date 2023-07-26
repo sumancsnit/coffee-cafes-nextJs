@@ -42,7 +42,7 @@ export default function Home(props) {
         );
 
         const coffeeStores = await response.json();
-
+        if (coffeeStores.length) handleCreateCoffeeStore(coffeeStores.at(0));
         dispatch({
           type: ACTION_TYPES.SET_COFFEE_STORES,
           payload: {
@@ -61,6 +61,39 @@ export default function Home(props) {
       getCoffeeStores();
     }
   }, [dispatch, latLong]);
+
+  const handleCreateCoffeeStore = async (coffeeStore) => {
+    try {
+      const { id, name, voting, imgUrl, neighbourhood, address, latLon } =
+        coffeeStore;
+      const response = await fetch('/api/createCoffeeStore', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id,
+          name,
+          voting: voting ?? 0,
+          imgUrl,
+          neighbourhood: neighbourhood || '',
+          address: address || '',
+          latLon,
+        }),
+      });
+
+      const dbCoffeeStore = await response.json();
+    } catch (err) {
+      console.error('Error creating coffee store', err);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      handleTrackLocation();
+      console.log('time out clicked');
+    }, 2000);
+  }, []);
 
   const handleOnBannerBtnClick = () => {
     handleTrackLocation();
