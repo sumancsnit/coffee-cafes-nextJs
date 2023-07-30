@@ -114,6 +114,10 @@ export default function Home(props) {
         <Head>
           <title>Coffee Cafes</title>
           <link rel='icon' href='/favicon.ico' />
+          <meta
+            name='description'
+            content='discover coffee stores near you'
+          ></meta>
         </Head>
         <p className={styles.userName}>Suman</p>
         <main className={styles.main}>
