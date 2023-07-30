@@ -163,6 +163,7 @@ const CoffeeStore = (initialProps) => {
     <>
       <Head>
         <title>{name}</title>
+        <meta name='description' content={`${name} coffee cafe`}></meta>
       </Head>
       {loader && (
         <div className={styles.loaderWrapper}>
