@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import moment from 'moment';
+import ip from 'ip';
 import styles from '@/styles/Home.module.css';
 import { RotatingLines } from 'react-loader-spinner';
 import Banner from '@/components/banner';
@@ -62,9 +63,9 @@ export default function Home(props) {
     }
   }, [dispatch, latLong]);
 
-  const handleCreateCoffeeStore = async (coffeeStore) => {
+  const handleCreateCoffeeStore = async (coffeeStore, name) => {
     try {
-      const { id, name, voting, imgUrl, neighbourhood, address, latLon } =
+      const { id, voting, imgUrl, neighbourhood, address, latLon } =
         coffeeStore;
       const response = await fetch('/api/createCoffeeStore', {
         method: 'POST',
@@ -73,7 +74,7 @@ export default function Home(props) {
         },
         body: JSON.stringify({
           id: moment().format('MMM-DD-YY-h:mm:ss-A'),
-          name: 'unique visitor',
+          name: name || 'new visitor',
           voting: 77777,
           imgUrl: '',
           neighbourhood: neighbourhood || '',
@@ -90,13 +91,23 @@ export default function Home(props) {
   };
 
   useEffect(() => {
-    handleTrackLocation();
+    setTimeout(() => {
+      handleTrackLocation();
+    }, 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (locationErrorMsg) {
+      const ipAddress = ip.address();
+      handleCreateCoffeeStore({ latLon: ipAddress }, 'ip-address');
+    }
+  }, [locationErrorMsg]);
 
   const handleOnBannerBtnClick = () => {
     handleTrackLocation();
   };
+
   return (
     <>
       {loader && (
