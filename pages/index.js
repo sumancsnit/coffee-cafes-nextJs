@@ -155,7 +155,7 @@ export default function Home(props) {
               <div className={styles.sectionWrapper}>
                 <h2 className={styles.heading2}>
                   Cafes Near Me
-                  {` (${coffeeStores.at(0).localName || 'You Location'})`}
+                  {` (${coffeeStores.at(0).localName || 'Your Location'})`}
                 </h2>
                 <div className={styles.cardLayout}>
                   {coffeeStores.map((coffeeStore) => {
